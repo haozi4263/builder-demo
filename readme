@@ -1,0 +1,63 @@
+go get github.com/kubernetes-sigs/kustomize
+
+初始化：
+    kubebuilder init --domain shimo.im --owner jude --repo github.com/haozi4263/builder-demo
+    hack 自动生成代码脚本文件
+    config: 资源清单文件
+创建api:
+    kubebuilder create api --group webapp --version v1 --kind Book
+    CRD: webapp/v1 Book
+        api:
+            book_tyeps: 定义book结构体
+            groupversion:定位group和version
+            zz_generted.deepcopy: 自动生成deepcopy
+        controllers: 控制器
+    api/v1/book_types.go                book结构体定义
+    api/v1/groupversion_info.go         book group/version定义
+    api/v1/zz_generated.deepcopy.go     神拷贝
+
+
+    controllers/book_controller.go      controllers控制器实现
+        BookReconciler结构体： 对Book对象做调谐、维护过程
+        Reconcile函数：真正调谐的实现，控制循环业务逻辑编写
+
+
+    controllers/suite_test.go           测试文件
+
+config:
+    samples:
+        webapp_v1_book.yaml编写crd
+
+
+开发完后部署安装：
+    make install 安装crd到集群
+        customresourcedefinition.apiextensions.k8s.io/books.webapp.shimo.im created
+        kubectl get crd
+        books.webapp.shimo.im   2021-12-29T06:40:59Z
+    make uninstall: 删除集群到crd
+
+    make docker build: 将crd控制器打包docker镜像
+    生产环境 make deploy: 将crd控制器部署到k8s集群中
+
+
+本地测试：
+    make run 将当前控制器运行到集群中
+    实际最终执行： go run main.go
+
+
+安装crd资源创建一本书：
+    kubectl apply -f config/samples/webapp_v1_book.yaml
+
+
+kubebuilderd对开发者来说需要做的是book_types结构体定义
+实现业务逻辑Reconcile函数
+
+
+
+
+
+
+
+
+
+

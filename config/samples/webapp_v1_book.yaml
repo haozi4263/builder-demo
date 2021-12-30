@@ -1,0 +1,8 @@
+apiVersion: webapp.shimo.im/v1
+kind: Book
+metadata:
+  name: book-sample
+spec:
+  # Add fields here
+  price: 100
+  title: kubernetes
